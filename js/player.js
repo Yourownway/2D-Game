@@ -1,8 +1,8 @@
 class Player {
 	constructor(map) {
 
-		this.width = 64; // La largeur de chaque frame du sprite
-		this.height = 64; // La hauteur de chaque frame du sprite
+		this.width = 38; // La largeur de chaque frame du sprite
+		this.height = 54; // La hauteur de chaque frame du sprite
 		this.speed = 2;
 		this.image = new Image();
 		this.image.src = "assets/player/sacha.jpg"; // Le chemin de la feuille de sprites
@@ -70,22 +70,22 @@ class Player {
 	draw(ctx, camera) {
 		ctx.drawImage(
 			this.image,
-			11 + this.frameX * this.width ,
-			8 +	this.frameY * this.height, // Position de la frame sur la feuille de sprites
+			11 + this.frameX * 64  ,
+			8 +	this.frameY * 64, // Position de la frame sur la feuille de sprites
 			38,
 			54, // Taille de la frame
-			this.x + 11 - camera.x,
-			this.y + 8 - camera.y, // Position de dessin sur le canvas
+			this.x  - camera.x,
+			this.y  - camera.y, // Position de dessin sur le canvas
 			38,
 			54 // Taille de dessin sur le canvas,
 		);
-		ctx.strokeStyle = "red"; // Couleur de la bordure
-		ctx.lineWidth = 2; // Épaisseur de la bordure
-		ctx.strokeRect(
-			this.x + 11 - camera.x,
-			this.y + 8 - camera.y,
-			38,
-			54
-		);
+		// ctx.strokeStyle = "red"; // Couleur de la bordure
+		// ctx.lineWidth = 2; // Épaisseur de la bordure
+		// ctx.strokeRect(
+		// 	this.x + 11 - camera.x,
+		// 	this.y + 8 - camera.y,
+		// 	38,
+		// 	54
+		// );
 	}
 }

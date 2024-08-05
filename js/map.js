@@ -83,10 +83,10 @@ class Map {
 				let tileY = row * this.displayTileSize;
 
 				if (
-					x >= tileX + dx + dWidth / 2 &&
-					x < (col + 1) * this.displayTileSize - dWidth + 2 * dx &&
+					x >= tileX  + dWidth / 2 - dx &&
+					x < (col + 1) * this.displayTileSize  - dWidth/2 + dx &&
 					y >= tileY + 2 * dy &&
-					y < (row + 1) * this.displayTileSize - dy - 8
+					y < (row + 1) * this.displayTileSize - dHeight/2 + 2*dy
 				) {
 					return true;
 				}
