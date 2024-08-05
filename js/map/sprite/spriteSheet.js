@@ -13,20 +13,20 @@ class SpriteSheet {
 				height: 64,
 				dWidth: 48,
 				dHeight: 64,
-                dx:8,
+				dx: 8,
 			},
 			{
 				name: "tree2",
-				sx: 2,
-				sy: 337,
-				sWidth: 38,
-				sHeight: 64,
+				sx: 0,
+				sy: 350,
+				sWidth: 48,
+				sHeight: 48,
 				width: 64,
 				height: 64,
-				dWidth: 38,
-				dHeight: 64,
-                dx:10,
-                dy:-4
+				dWidth: 48,
+				dHeight: 52,
+				dx: (64 - 48) / 2,
+				dy: (64 - 48) / 2,
 			},
 			{
 				name: "fir1",
@@ -48,8 +48,19 @@ class SpriteSheet {
 	loadSprites(callback) {
 		this.image.onload = () => {
 			for (let spriteConfig of this.spritesConfig) {
-				let { name, width, height, sx, sy, sWidth, sHeight, dWidth, dHeight, dx = 0, dy = 0 } =
-					spriteConfig;
+				let {
+					name,
+					width,
+					height,
+					sx,
+					sy,
+					sWidth,
+					sHeight,
+					dWidth,
+					dHeight,
+					dx = 0,
+					dy = 0,
+				} = spriteConfig;
 				let canvas = document.createElement("canvas");
 				canvas.width = width;
 				canvas.height = height;
@@ -65,23 +76,16 @@ class SpriteSheet {
 					dWidth,
 					dHeight
 				);
+				ctx.strokeStyle = "red"; // Couleur de la bordure
+				ctx.lineWidth = 2; // Épaisseur de la bordure
+				ctx.strokeRect(dx, dy, dWidth, dHeight);
+				
 				let src = canvas.toDataURL();
-				this.sprites.push({ name, src, sWidth, sHeight, dWidth, dHeight });
+				this.sprites.push({ name, src, sWidth, sHeight, dWidth, dHeight,dx,dy });
 			}
 			callback(this.sprites);
 		};
 	}
 
-	drawSprite(ctx, index, x, y, tileSize) {
-		if (index < 0 || index >= this.sprites.length) return;
-		let sprite = this.sprites[index];
-		let img = new Image();
-		img.src = sprite.src;
 
-		// Calculer les offsets pour centrer le sprite
-		let offsetX = (tileSize - sprite.width) / 2;
-		let offsetY = (tileSize - sprite.height) / 2;
-
-		ctx.drawImage(img, x + offsetX, y + offsetY, sprite.sWidth, sprite.sHeight);
-	}
 }

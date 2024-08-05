@@ -2,13 +2,11 @@
 window.onload = function () {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-    const spritesheet = new SpriteSheet('assets/maps/01/land.png');
+    const spritesheet = new SpriteSheet('assets/maps/01/land.jpg');
 	const map = new Map(spritesheet);
-	const player = new Player(0, 0, map);
+	const player = new Player(map);
 	const camera = new Camera(canvas.width, canvas.height);
 
-	console.dir(canvas, "canvas1");
-	console.dir(camera, "camera1");
 
 	function gameLoop() {
 		// Efface le canevas

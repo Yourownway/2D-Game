@@ -1,13 +1,14 @@
 class Player {
-	constructor(x, y, map) {
-		this.x = x;
-		this.y = y;
+	constructor(map) {
+
 		this.width = 64; // La largeur de chaque frame du sprite
 		this.height = 64; // La hauteur de chaque frame du sprite
 		this.speed = 2;
 		this.image = new Image();
-		this.image.src = "assets/player/sacha.png"; // Le chemin de la feuille de sprites
+		this.image.src = "assets/player/sacha.jpg"; // Le chemin de la feuille de sprites
 		this.map = map;
+		this.x = (this.map.displayTileSize - this.width) / 2;
+		this.y = (this.map.displayTileSize - this.height) / 2;
 		this.keys = {}; // État des touches
 
 		this.frameX = 0; // La colonne actuelle dans la feuille de sprites
@@ -63,19 +64,28 @@ class Player {
 			newX = this.x;
 			newY = this.y;
 		}
+		
 	}
 
 	draw(ctx, camera) {
 		ctx.drawImage(
 			this.image,
-			this.frameX * this.width,
-			this.frameY * this.height, // Position de la frame sur la feuille de sprites
-			this.width,
-			this.height, // Taille de la frame
-			this.x - camera.x,
-			this.y - camera.y, // Position de dessin sur le canvas
-			this.width,
-			this.height // Taille de dessin sur le canvas
+			11 + this.frameX * this.width ,
+			8 +	this.frameY * this.height, // Position de la frame sur la feuille de sprites
+			38,
+			54, // Taille de la frame
+			this.x + 11 - camera.x,
+			this.y + 8 - camera.y, // Position de dessin sur le canvas
+			38,
+			54 // Taille de dessin sur le canvas,
+		);
+		ctx.strokeStyle = "red"; // Couleur de la bordure
+		ctx.lineWidth = 2; // Épaisseur de la bordure
+		ctx.strokeRect(
+			this.x + 11 - camera.x,
+			this.y + 8 - camera.y,
+			38,
+			54
 		);
 	}
 }
