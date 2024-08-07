@@ -2,7 +2,12 @@
 window.onload = function () {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-    const spritesheet = new SpriteSheet('assets/maps/01/land.jpg');
+	const imageUrls = [
+		'assets/maps/01/land.png',
+		'assets/maps/01/house2D.png',
+	];
+	
+	const spritesheet = new SpriteSheet(imageUrls);
 	const map = new Map(spritesheet);
 	const player = new Player(map);
 	const camera = new Camera(canvas.width, canvas.height);

@@ -21,14 +21,14 @@ class Map {
 
 		this.map = [
 			// Exemple de carte avec différentes tuiles provenant de différents tilesets
-			[1, 2, 1, 0, 0, 0, 0, 0, 0, 0],
+			[1, 2, 1, 2, 1, 2, 2, 0, 0, 0],
 			[2, 2, 2, 1, 1, 1, 1, 1, 1, 0],
 			[2, 1, 1, 1, 0, 0, 0, 0, 1, 0], // 2 correspond à une tuile du deuxième tileset
 			[2, 2, 2, 1, 1, 1, 1, 0, 1, 0],
-			[2, 1, 0, 1, 0, 0, 1, 0, 1, 0],
-			[0, 1, 0, 1, 0, 0, 1, 0, 1, 0],
-			[0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
-			[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+			[2, 1, 1, 1, 0, 0, 1, 0, 1, 0],
+			[0, 1, 1, 1, 0, 0, 1, 0, 1, 0],
+			[0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+			[0, 1, 1, 0, 0, 0, 0, 0, 1, 0],
 			[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		];
@@ -54,26 +54,31 @@ class Map {
 	}
 
 	initializeNatureMatrix() {
-		// Assurez-vous que la natureMatrix a la même dimension que la map
 		this.natureMatrix = this.createEmptyMatrix(this.rows, this.cols);
-		this.natureMatrix[0][1] = "tree1";
-		// this.natureMatrix[1][1] = 'fir1';
+
 		this.natureMatrix[2][1] = "tree2";
-		// Ajoutez la configuration de votre natureMatrix
+		this.natureMatrix[2][2] = "tree2";
+		this.natureMatrix[3][1] = "tree2";
+		this.natureMatrix[3][2] = "tree2";
+		this.natureMatrix[4][1] = "tree2";
+		this.natureMatrix[4][2] = "tree2";
+		this.natureMatrix[0][1] = "house1";
+		this.natureMatrix[0][2] = "house2";
+		this.natureMatrix[0][3] = "house3";
+	    this.natureMatrix[2][0] = "fir1";
+		this.natureMatrix[0][5] = "tree1";
 	}
 
 	isObstacle(x, y) {
 		const col = Math.floor(x / this.displayTileSize);
 		const row = Math.floor(y / this.displayTileSize);
 
-		// Vérifier si les indices sont valides avant d'accéder à la matrice
 		if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) {
-			return true; // Considérer les indices hors limites comme obstacles
+			return true;
 		}
-		// Considérer les tuiles de type 0 comme des obstacles
+
 		if (this.map[row][col] === 0) return true;
 
-		// Vérifier les obstacles dans la natureMatrix
 		let natureTile = this.natureMatrix[row][col];
 		if (natureTile) {
 			let sprite = this.sprites.find((s) => s.name === natureTile);
@@ -83,19 +88,13 @@ class Map {
 				let tileY = row * this.displayTileSize;
 
 				if (
-					x >= tileX  + dWidth / 2 - dx &&
-					x < (col + 1) * this.displayTileSize  - dWidth/2 + dx &&
-					y >= tileY + 2 * dy &&
-					y < (row + 1) * this.displayTileSize - dHeight/2 + 2*dy
+					x >= tileX + dx &&
+					x < tileX + dWidth &&
+					y >= tileY + dy &&
+					y < tileY + dHeight
 				) {
 					return true;
 				}
-				// Vérifier si les coordonnées se trouvent dans les limites de l'élément
-				//     if (x > (tileX  + dWidth/2)  && x < (col + 1)* this.displayTileSize + dx + 8 - dWidth
-				//     && y >= tileY + 8  && y < (row + 1)* this.displayTileSize - dy -8
-				// ) {
-				//         return true;
-				//     }
 			}
 		}
 
@@ -103,7 +102,6 @@ class Map {
 	}
 
 	canMoveTo(x, y, width, height) {
-		// Vérifier les quatre coins du joueur
 		const canMove = !(
 			this.isObstacle(x, y) ||
 			this.isObstacle(x + width, y) ||
@@ -122,15 +120,12 @@ class Map {
 				} else if (tile === 1) {
 					tile = 0;
 				}
-				// Sélectionner le tileset approprié en fonction de la valeur de la tuile
-				let tilesetIndex = Math.floor(tile / 2); // Par exemple, les tuiles 0 et 1 proviennent du premier tileset, 2 et 3 du deuxième, etc.
+				let tilesetIndex = Math.floor(tile / 2);
 				let tileset = this.tilesets[tilesetIndex];
 
-				// Calculer les coordonnées de la tuile dans le tileset
-				let sx = (tile % 2) * this.tileSize; // 2 est le nombre de colonnes de tuiles dans le tileset
+				let sx = (tile % 2) * this.tileSize;
 				let sy = 0;
 
-				// Dessiner la tuile
 				ctx.drawImage(
 					tileset,
 					sx,
@@ -143,7 +138,6 @@ class Map {
 					this.displayTileSize
 				);
 
-				// Dessiner l'élément naturel s'il y en a un
 				let natureTile = this.natureMatrix[row][col];
 				if (natureTile) {
 					let sprite = this.sprites.find((s) => s.name === natureTile);
