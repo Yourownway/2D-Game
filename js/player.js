@@ -1,6 +1,5 @@
 class Player {
 	constructor(map) {
-
 		this.width = 30; // La largeur de chaque frame du sprite
 		this.height = 54; // La hauteur de chaque frame du sprite
 		this.speed = 2;
@@ -17,7 +16,7 @@ class Player {
 		this.animSpeed = 10; // Vitesse de l'animation
 		this.animCounter = 0; // Compteur pour l'animation
 
-        this.isUp = true; // etat pression touches clavier
+		this.isUp = true; // etat pression touches clavier
 
 		// Ajouter les écouteurs d'événements pour le clavier
 		window.addEventListener("keydown", (e) => {
@@ -29,12 +28,11 @@ class Player {
 			this.isUp = true;
 		});
 	}
-
 	update() {
 		let newX = this.x;
 		let newY = this.y;
 
-		!this.isUp ? this.animCounter++ : this.frameX = 0;
+		!this.isUp ? this.animCounter++ : (this.frameX = 0);
 		if (this.animCounter >= this.animSpeed) {
 			this.animCounter = 0;
 			this.frameX = (this.frameX + 1) % this.frameCount; // Avancer à la prochaine frame
@@ -57,25 +55,54 @@ class Player {
 			this.frameY = 2; // Ligne de l'animation vers la droite
 		}
 
-		if (this.map.canMoveTo(newX, newY, this.width, this.height)) {
+		// Vérifier si le joueur reste dans les limites de la carte
+		const withinBoundsX =
+			newX >= 0 &&
+			newX + this.width <= this.map.cols * this.map.displayTileSize;
+		const withinBoundsY =
+			newY >= 0 &&
+			newY + this.height <= this.map.rows * this.map.displayTileSize;
+
+		// Vérifier si le joueur peut bouger sans rencontrer d'obstacle et reste dans les limites
+		if (
+			withinBoundsX &&
+			withinBoundsY &&
+			this.map.canMoveTo(newX, newY, this.width, this.height)
+		) {
 			this.x = newX;
 			this.y = newY;
-		} else {
-			newX = this.x;
-			newY = this.y;
 		}
-		
+
+		// Vérifier si le joueur entre dans une maison
+		if (
+			this.map.checkForHouseEntry(this) &
+			!this.map.canMoveTo(newX, newY, this.width, this.height)
+		) {
+			this.map.loadNewMap();
+			this.resetPosition();
+		}
 	}
 
+	resetPosition() {
+		const middleCol = Math.floor(this.map.cols / 2); // Colonne du milieu
+		const lastRow = this.map.rows - 1; // Dernière ligne
+
+		this.x =
+			middleCol * this.map.displayTileSize +
+			(this.map.displayTileSize - this.width) / 2;
+		this.y =
+			lastRow * this.map.displayTileSize +
+			(this.map.displayTileSize - this.height) / 2;
+	}
 	draw(ctx, camera) {
 		ctx.drawImage(
 			this.image,
-			11 + this.frameX * 64  ,
-			8 +	this.frameY * 64, // Position de la frame sur la feuille de sprites
+			11 + this.frameX * 64,
+			8 + this.frameY * 64, // Position de la frame sur la feuille de sprites
 			38,
 			54, // Taille de la frame
-			this.x  - camera.x,
-			this.y  - camera.y, // Position de dessin sur le canvas
+			this.x - camera.x,
+			this.y - camera.y, // Position de dessin sur le canvas
 			38,
 			54 // Taille de dessin sur le canvas,
 		);

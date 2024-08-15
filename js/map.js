@@ -63,9 +63,12 @@ class Map {
 		this.natureMatrix[4][1] = "tree2";
 		this.natureMatrix[4][2] = "tree2";
 		this.natureMatrix[0][1] = "house1";
+		this.natureMatrix[1][1] = "houseEntranceBottom";
 		this.natureMatrix[0][2] = "house2";
+		this.natureMatrix[1][2] = "houseEntranceBottom";
 		this.natureMatrix[0][3] = "house3";
-	    this.natureMatrix[2][0] = "fir1";
+		this.natureMatrix[1][3] = "houseEntranceBottom";
+		this.natureMatrix[2][0] = "fir1";
 		this.natureMatrix[0][5] = "tree1";
 	}
 
@@ -109,6 +112,66 @@ class Map {
 			this.isObstacle(x + width, y + height)
 		);
 		return canMove;
+	}
+
+	checkForHouseEntry(player) {
+		const col = Math.floor(player.x / this.displayTileSize);
+		const row = Math.floor(player.y / this.displayTileSize);
+
+		// Vérifier si le joueur est dans les limites de la carte
+		if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+			let natureTile = this.natureMatrix[row][col];
+
+			if (natureTile) {
+				// Vérifier les différents cas d'entrées en fonction de l'orientation de la maison
+				if (natureTile === "houseEntranceBottom" && player.keys["ArrowUp"]) {
+					// Vérifier si le joueur est juste en dessous de la maison (en bas)
+					let aboveTile = this.natureMatrix[row - 1][col];
+					if (aboveTile && aboveTile.includes("house")) {
+						// Le joueur est à la limite exacte entre l'entrée et la maison
+						return true;
+					}
+				}
+				if (natureTile === "houseEntranceTop" && player.keys["ArrowDown"]) {
+					// Vérifier si le joueur est juste au-dessus de la maison (en haut)
+					let belowTile = this.natureMatrix[row + 1][col];
+					if (belowTile && belowTile.includes("house")) {
+						return true;
+					}
+				}
+				if (natureTile === "houseEntranceLeft" && player.keys["ArrowRight"]) {
+					// Vérifier si le joueur est juste à gauche de la maison
+					let rightTile = this.natureMatrix[row][col + 1];
+					if (rightTile && rightTile.includes("house")) {
+						return true;
+					}
+				}
+				if (natureTile === "houseEntranceRight" && player.keys["ArrowLeft"]) {
+					// Vérifier si le joueur est juste à droite de la maison
+					let leftTile = this.natureMatrix[row][col - 1];
+					if (leftTile && leftTile.includes("house")) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	loadNewMap() {
+		this.rows = 5;
+		this.cols = 5;
+		// Vous pouvez définir ici les nouvelles valeurs pour la carte, la matrice de nature, etc.
+		this.map = [
+			// Exemple d'une nouvelle carte
+			[1, 1, 1, 1, 1],
+			[1, 1, 1, 1, 1],
+			[1, 1, 1, 1, 1],
+			[1, 1, 1, 1, 1],
+			[1, 1, 1, 1, 1],
+		];
+		this.natureMatrix = this.createEmptyMatrix(this.rows, this.cols); // Réinitialiser la matrice de nature si nécessaire
 	}
 
 	draw(ctx, camera) {

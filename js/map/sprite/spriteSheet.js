@@ -12,8 +12,8 @@ class SpriteSheet {
 				height: 160,
 				dWidth: 108,
 				dHeight: 118,
-				 dx: (160-108)/2,
-				 dy:(160-118)/2,
+				dx: (160 - 108) / 2,
+				dy: (160 - 118) / 2,
 				imageIndex: 0,
 			},
 			{
@@ -26,8 +26,8 @@ class SpriteSheet {
 				height: 160,
 				dWidth: 90,
 				dHeight: 90,
-				dx: (160-90)/2,
-				dy:(160-90)/2,
+				dx: (160 - 90) / 2,
+				dy: (160 - 90) / 2,
 				// dy: (64 - 48) / 2,
 				imageIndex: 0, // Ajoutez un index d'image pour spécifier l'image à partir de laquelle ce sprite doit être chargé
 			},
@@ -41,8 +41,8 @@ class SpriteSheet {
 				height: 160,
 				dWidth: 90,
 				dHeight: 90,
-				dx: (160-90)/2,
-				dy:(160-90)/2,
+				dx: (160 - 90) / 2,
+				dy: (160 - 90) / 2,
 				imageIndex: 0,
 			},
 			{
@@ -56,8 +56,9 @@ class SpriteSheet {
 				dWidth: 256,
 				dHeight: 210,
 				imageIndex: 1,
-				dy:46
-			},	{
+				dy: 46,
+			},
+			{
 				name: "house2",
 				sx: 298,
 				sy: 525,
@@ -68,9 +69,10 @@ class SpriteSheet {
 				dWidth: 222,
 				dHeight: 210,
 				imageIndex: 1,
-				dy:46,
-				dx: 18
-			},	{
+				dy: 46,
+				dx: 18,
+			},
+			{
 				name: "house3",
 				sx: 550,
 				sy: 500,
@@ -82,7 +84,7 @@ class SpriteSheet {
 				dHeight: 235,
 				imageIndex: 1,
 				dx: 16,
-				dy: 22
+				dy: 22,
 			},
 			// Ajoutez autant de sprites que nécessaire
 		];
@@ -98,7 +100,10 @@ class SpriteSheet {
 
 			image.onload = () => {
 				for (let spriteConfig of this.spritesConfig) {
-					if (spriteConfig.imageIndex !== undefined && spriteConfig.imageIndex !== index) {
+					if (
+						spriteConfig.imageIndex !== undefined &&
+						spriteConfig.imageIndex !== index
+					) {
 						continue; // Si l'index de l'image ne correspond pas, passer au sprite suivant
 					}
 					let {
@@ -129,12 +134,21 @@ class SpriteSheet {
 						dWidth,
 						dHeight
 					);
-					// ctx.strokeStyle = "red"; // Couleur de la bordure
-					// ctx.lineWidth = 2; // Épaisseur de la bordure
-					// ctx.strokeRect(dx, dy, dWidth, dHeight);
+					ctx.strokeStyle = "red"; // Couleur de la bordure
+					ctx.lineWidth = 2; // Épaisseur de la bordure
+					ctx.strokeRect(dx, dy, dWidth, dHeight);
 
 					let src = canvas.toDataURL();
-					this.sprites.push({ name, src, sWidth, sHeight, dWidth, dHeight, dx, dy });
+					this.sprites.push({
+						name,
+						src,
+						sWidth,
+						sHeight,
+						dWidth,
+						dHeight,
+						dx,
+						dy,
+					});
 				}
 				loadedImages++;
 				if (loadedImages === this.imageSrcArray.length) {
@@ -144,4 +158,3 @@ class SpriteSheet {
 		}
 	}
 }
-
